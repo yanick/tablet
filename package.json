@@ -1,0 +1,14 @@
+{
+  "name": "@yanick/tablet",
+  "version": "0.1.0",
+  "description": "Utilities to interact with roleplaying games' data tables",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["rpg"],
+  "author": "Yanick Champoux <yanick@babyl.ca>",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0"
+}
