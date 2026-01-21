@@ -7,8 +7,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["rpg"],
+  "keywords": [
+    "rpg"
+  ],
   "author": "Yanick Champoux <yanick@babyl.ca>",
   "license": "ISC",
-  "packageManager": "pnpm@10.20.0"
+  "packageManager": "pnpm@10.20.0",
+  "dependencies": {
+    "@types/node": "^25.0.9",
+    "@types/yargs": "^17.0.35",
+    "@yanick/tablet": "link:",
+    "typescript": "^5.9.3",
+    "yargs": "^18.0.0"
+  },
+  "bin": {
+    "tablet": "dist/cli/index.js"
+  }
 }
