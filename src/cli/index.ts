@@ -1,10 +1,19 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import DataTable from '../DataTable.js';
 
 const argv = yargs(hideBin(process.argv))
 	.scriptName('tablet')
-	.command('roll <file>', 'roll for an entry in the table', (argv) => {
-		console.log("we be rolling...")
+	.command({
+		command: 'roll <file>',
+		describe: 'roll to select an entry of the table',
+		handler: async (argv) => {
+			const table = new DataTable(argv.file);
+
+			console.log(
+				JSON.stringify(await table.roll())
+			)
+		}
 	})
 	.help()
 	.parse();
