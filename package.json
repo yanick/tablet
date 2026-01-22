@@ -4,12 +4,12 @@
   "description": "Utilities to interact with roleplaying games' data tables",
   "type": "module",
   "repository": {
-	  "type": "git",
-		"url": "https://github.com/yanick/tablet"
+    "type": "git",
+    "url": "https://github.com/yanick/tablet"
   },
   "homepage": "https://github.com/yanick/tablet#readme",
   "bugs": {
-		"url": "https://github.com/yanick/tablet/issues"
+    "url": "https://github.com/yanick/tablet/issues"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,8 +17,12 @@
   "keywords": [
     "rpg"
   ],
-  "exports": { ".": "./dist/index.js"},
-  "files": [ "dist/**" ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist/**"
+  ],
   "author": "Yanick Champoux <yanick@babyl.ca>",
   "license": "ISC",
   "packageManager": "pnpm@10.20.0",
@@ -41,7 +45,9 @@
     "tablet": "dist/cli/index.js"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "eslint": "^9.39.2",
     "eslint-plugin-package-json": "^0.88.1"
-  }, "sideEffects": false
+  },
+  "sideEffects": false
 }
