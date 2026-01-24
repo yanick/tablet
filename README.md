@@ -1,8 +1,19 @@
 # @yanick/tablet
 
-I play role-playing games (neeeerd!), and moreover I like to write scripts and
-whatnots (humongous neeeerd!) to create characters, roll events, etc.
+I play role-playing games -- great fun! And -- funnier still -- I like to write scripts and
+whatnots to create characters, roll events, etc.
 Enter `tablet`, which is meant to provide tools to access, populate, and use role-playing game data tables.
+
+## Installation 
+
+    pnpm install @yanick/tablet
+
+Or, to make the script `tablet` available globally:
+
+    npm install -g @yanick/tablet
+    
+
+## Tablet's killer feature
 
 Now, while it's indubitably handy to have your games' tables in files, it's
 also incredibly boring to sit down and copy them wholesale from the original books. 
@@ -31,18 +42,6 @@ the table, it will interactively ask you for the values of the new entry, and
 save it to the file. That way one can initially create minimal tables, and
 populate them incrementally. 
 
-Incidentally, The name `tablet` is a nod to my revered DM, who has a looooong-standing
-thread on his blog and Mastodon where he posts translations of old
-Mesopotamian tablets. 
-
-## Installation 
-
-    pnpm install @yanick/tablet
-
-Or, to make the script `tablet` available globally:
-
-    npm install -g @yanick/tablet
-    
 
 ## From the CLI
 
@@ -81,3 +80,10 @@ subtable: sub-table
 ### Row data 
 
 If a table is table that can be rolled against, it requires a `roll` column, which either contains a single number or a range (e.g., `10-21`). 
+
+## Etymology
+
+Incidentally, The name `tablet` is a nod to Gizmo Mathboy, dear friend and dreaded DM, who has a looooong-standing
+thread of translated Mesopotamian tablets on his
+[blog](https://www.gizmomathboy.com/blog/page/my_cuneiform_tablets/day1889.html) and Mastodon. 
+
