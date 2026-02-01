@@ -1,4 +1,5 @@
-import fs from 'fs';
+import fs from 'fs/promises';
+import { extname } from 'path';
 import frontmatter from 'frontmatter';
 import { createMarkdownObjectTableSync } from 'parse-markdown-table';
 import u from '@yanick/updeep';
@@ -7,6 +8,9 @@ import * as prompt from '@inquirer/prompts';
 import * as yaml from 'yaml';
 import { markdownTable } from 'markdown-table';
 import * as R from 'remeda';
+import { MarkdownFile } from './FileApi/Markdown.js';
+import { YamlFile } from './FileApi/YamlFile.js';
+import type { FileApi } from './FileApi/base.js';
 
 const roll = new Roll();
 
@@ -15,51 +19,76 @@ type Metadata = {
 	subtable?: string
 };
 
+function groomEntries(entries) {
+	for (const e of entries) {
+		if (e.roll?.includes('-')) {
+			e.roll = e.roll.split('-').map(x => Number(x))
+		}
+		if (e.roll?.includes(',')) {
+			e.roll = e.roll.split(',').map(x => Number(x))
+		}
+	}
+
+	return entries;
+}
+
+
 export default class DataTable<ENTRY = Record<string, any>, META extends Metadata = Metadata> {
 	path: string;
-	metadata: META;
-	entries: ENTRY[];
+	metadata: Promise<META>;
+	entries: Promise<ENTRY[]>;
+	fileType: 'md';
+    fileApi: FileApi;
+
+	fileApis = [
+        MarkdownFile, YamlFile
+	];
 
 	constructor(path: string) {
 		this.path = path;
 
-		const parsed = frontmatter(
-			fs.readFileSync(path, { encoding: 'utf8' })
-		);
+		const ext = extname(path);
 
-		this.metadata = parsed.data;
-		this.entries = [...createMarkdownObjectTableSync(parsed.content)] as any as ENTRY[];
-
-		for (const e of (this.entries as any[])) {
-			if (e.roll?.includes('-')) {
-				e.roll = e.roll.split('-').map(x => Number(x))
-			}
-			if (e.roll?.includes(',')) {
-				e.roll = e.roll.split(',').map(x => Number(x))
-			}
+		const fileApi = this.findApi(ext);
+		if (!fileApi) {
+			throw new Error(`extension '${ext}' not recognized`);
 		}
 
+        this.fileApi = new fileApi<ENTRY>(path);
+		const data:any = this.fileApi.readFile();
+		this.entries = data.then(R.prop('entries')).then(
+			groomEntries
+		) as Promise<ENTRY[]>;
+		this.metadata = data.then(R.prop('metadata'));
+	}
+
+	findApi(ext: string) {
+		return this.fileApis.find(
+			api => Array.isArray(api.ext) ? api.ext.includes(ext) : ext === api.ext
+		);
 	}
 
 	async roll(value?: number): Promise<ENTRY> {
+		const metadata: any = await this.metadata;
 		if (!value) {
-			if (!(this.metadata as any)?.roll)
+			if (!metadata?.roll)
 				throw new Error('roll metadata not defined for table');
 
-			value = roll.roll((this.metadata as any).roll).result;
+			value = roll.roll(metadata.roll).result;
 		}
 
 		// @ts-ignore
-		const entry = this.entries.find(({ roll }: { roll: number | [number, number] }) => {
+		const entry = (await this.entries).find(({ roll }: { roll: number | [number, number] }) => {
 			if (Array.isArray(roll))
 				return roll[0] <= value && roll[1] >= value;
 			return roll == value;
 		}) ?? await this.populateTableFor(value);
 
-		if (this.metadata.subtable) {
-			const subtable = entry[this.metadata.subtable];
-			if (subtable)
-				return new DataTable<ENTRY>(subtable).roll();
+		const { subtable } = await this.metadata;
+		if (subtable) {
+			const file = entry[subtable];
+			if (file)
+				return new DataTable<ENTRY>(file).roll();
 		}
 
 		return entry;
@@ -71,7 +100,7 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 
 		let entry = {} as ENTRY;
 
-		const [sample] = this.entries;
+		const [sample] = await this.entries;
 
 		for (const key in sample) {
 			const result = await prompt.input({ message: key });
@@ -79,30 +108,17 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 			entry[key] = result;
 		}
 
-		this.entries.push(entry);
-		this.save();
+		await this.entries.then(e => e.push(entry)).then(() => this.save());
 
 		return entry;
 	}
 
 	async save() {
-		const meta = yaml.stringify(this.metadata);
-
-		const headers = Object.keys(this.entries[0]);
-		let entries = u.map(this.entries, {
-			roll: r => {
-				if (!Array.isArray(r)) return r;
-				return r.join('-');
-			}
-		});
-		entries = R.sortBy(entries, (a) => a[headers[0]]);
-
-		const table = markdownTable([
-			headers, ...entries.map(e => headers.map(h => e[h]))
-		]);
-
-		const content = `---\n${meta}\n---\n${table}\n`;
-
-		return fs.writeFileSync(this.path, content);
+        return this.fileApi.writeFile({
+            entries: await this.entries,
+            metadata: await this.metadata,
+        })
 	}
+
+
 }

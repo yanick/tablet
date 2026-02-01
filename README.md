@@ -53,7 +53,12 @@ be asked to provide the entry's values, which will then be saved in the file.
 
 ## Table Format
 
-Tables are kept in Markdown files (more formats upcoming). The files can have
+Right now `tablet` supports Markdown and YAML as a file format. More are
+coming.
+
+### Markdown
+
+The file can have
 an optional frontmatter for metadata, and the table itself is using the GFM
 table syntax.
 
@@ -69,7 +74,30 @@ subtable: sub-table
 | ----  | ---     | ---                 |
 | 1-10  | Human   |                     |
 | 11-20 | Monster | species/monsters.md |
+```
 
+### YAML
+
+The file can have one or two YAML documents. If there is one, it's assumed to
+be the entries, if there are two, they are assumed to be the metadata and the
+entries, respectively.
+
+For example:
+
+```
+---
+roll: 1d100
+---
+- roll: 1-20
+  species: Human
+- roll: 21-30
+  species: Kobold
+- roll: 87
+  species: Troll
+- roll: 51
+  species: Widget
+- roll: 65
+  species: Bump
 ```
 
 ### Metadata

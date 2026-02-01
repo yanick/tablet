@@ -1,0 +1,15 @@
+---
+roll: 1d100
+
+---
+- roll: 1-20
+  species: Human
+- roll: 21-30
+  species: Kobold
+- roll: 87
+  species: Troll
+- roll: 51
+  species: Widget
+- roll: 65
+  species: Bump
+
