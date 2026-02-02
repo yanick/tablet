@@ -10,6 +10,7 @@ import { markdownTable } from 'markdown-table';
 import * as R from 'remeda';
 import { MarkdownFile } from './FileApi/Markdown.js';
 import { JSONFile } from './FileApi/Json.js';
+import { CSVFile } from './FileApi/CsvFile.js';
 import { YamlFile } from './FileApi/YamlFile.js';
 import type { FileApi } from './FileApi/base.js';
 
@@ -42,7 +43,7 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 	fileApi: FileApi;
 
 	fileApis = [
-		MarkdownFile, YamlFile, JSONFile
+		MarkdownFile, YamlFile, JSONFile, CSVFile
 	];
 
 	constructor(path: string) {
