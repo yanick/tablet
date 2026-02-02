@@ -100,6 +100,31 @@ roll: 1d100
   species: Bump
 ```
 
+### JSON
+
+The JSON document is expected to have the key `entries`, and optionally
+`metadata`.
+
+For example:
+
+```
+{
+  "entries": [
+    {
+      "roll": "1-20",
+      "species": "Human"
+    },
+    {
+      "roll": "21-30",
+      "species": "Kobold"
+    }
+  ],
+  "metadata": {
+    "roll": "1d100"
+  }
+}
+```
+
 ### Metadata
 
 * `roll` - what to roll when we want an entry of the table. The package [roll](https://www.npmjs.com/package/roll) is used for the roll syntax.

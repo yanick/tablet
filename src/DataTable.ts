@@ -9,6 +9,7 @@ import * as yaml from 'yaml';
 import { markdownTable } from 'markdown-table';
 import * as R from 'remeda';
 import { MarkdownFile } from './FileApi/Markdown.js';
+import { JSONFile } from './FileApi/Json.js';
 import { YamlFile } from './FileApi/YamlFile.js';
 import type { FileApi } from './FileApi/base.js';
 
@@ -38,10 +39,10 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 	metadata: Promise<META>;
 	entries: Promise<ENTRY[]>;
 	fileType: 'md';
-    fileApi: FileApi;
+	fileApi: FileApi;
 
 	fileApis = [
-        MarkdownFile, YamlFile
+		MarkdownFile, YamlFile, JSONFile
 	];
 
 	constructor(path: string) {
@@ -54,8 +55,8 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 			throw new Error(`extension '${ext}' not recognized`);
 		}
 
-        this.fileApi = new fileApi<ENTRY>(path);
-		const data:any = this.fileApi.readFile();
+		this.fileApi = new fileApi<ENTRY>(path);
+		const data: any = this.fileApi.readFile();
 		this.entries = data.then(R.prop('entries')).then(
 			groomEntries
 		) as Promise<ENTRY[]>;
@@ -114,10 +115,10 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 	}
 
 	async save() {
-        return this.fileApi.writeFile({
-            entries: await this.entries,
-            metadata: await this.metadata,
-        })
+		return this.fileApi.writeFile({
+			entries: await this.entries,
+			metadata: await this.metadata,
+		})
 	}
 
 

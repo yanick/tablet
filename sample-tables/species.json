@@ -1,0 +1,15 @@
+{
+  "entries": [
+    {
+      "roll": "1-20",
+      "species": "Human"
+    },
+    {
+      "roll": "21-30",
+      "species": "Kobold"
+    }
+  ],
+  "metadata": {
+    "roll": "1d100"
+  }
+}
