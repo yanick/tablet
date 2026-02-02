@@ -51,6 +51,10 @@ Randomly picks an entry of the table, and prints it (in Markdown format). If the
 rolled value doesn't have a corresponding entry, the user will interactively
 be asked to provide the entry's values, which will then be saved in the file.
 
+### tablet print <table_file>
+
+Prints the table to stdout.
+
 ## Table Format
 
 ### Markdown

@@ -22,6 +22,23 @@ const argv = yargs(hideBin(process.argv))
 			);
 		}
 	})
+	.command({
+		command: 'print <file>',
+		describe: 'print the table to stdout',
+		handler: async (argv) => {
+			const table = new DataTable(argv.file);
+
+			const Printer = table.findApi('md');
+			const printer = new Printer();
+
+			console.log(
+				await printer.serialize({
+					metadata: await table.metadata,
+					entries: await table.entries,
+				})
+			);
+		}
+	})
 	.help()
 	.parse();
 
