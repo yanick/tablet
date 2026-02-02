@@ -53,9 +53,6 @@ be asked to provide the entry's values, which will then be saved in the file.
 
 ## Table Format
 
-Right now `tablet` supports Markdown and YAML as a file format. More are
-coming.
-
 ### Markdown
 
 The file can have
@@ -123,6 +120,19 @@ For example:
     "roll": "1d100"
   }
 }
+```
+
+### CSV
+
+A regular CSV file. You can add metadata as commented out lines, which will 
+be interpreted as a YAML document.
+
+For example:
+
+```
+# roll: 1d100
+1-20, Human
+21-30, Kobold
 ```
 
 ### Metadata
