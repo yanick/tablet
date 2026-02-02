@@ -37,6 +37,7 @@ function groomEntries(entries) {
 
 export default class DataTable<ENTRY = Record<string, any>, META extends Metadata = Metadata> {
 	path: string;
+	ext: string;
 	metadata: Promise<META>;
 	entries: Promise<ENTRY[]>;
 	fileType: 'md';
@@ -49,11 +50,11 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 	constructor(path: string) {
 		this.path = path;
 
-		const ext = extname(path).replace(/^\./, '');
+		this.ext = extname(path).replace(/^\./, '');
 
-		const fileApi = this.findApi(ext);
+		const fileApi = this.findApi(this.ext);
 		if (!fileApi) {
-			throw new Error(`extension '${ext}' not recognized`);
+			throw new Error(`extension '${this.ext}' not recognized`);
 		}
 
 		this.fileApi = new fileApi<ENTRY>(path);
@@ -64,7 +65,9 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 		this.metadata = data.then(R.prop('metadata'));
 	}
 
-	findApi(ext: string) {
+	findApi(ext: string | undefined) {
+		if (!ext) ext = this.ext;
+
 		return this.fileApis.find(
 			api => Array.isArray(api.ext) ? api.ext.includes(ext) : ext === api.ext
 		);
