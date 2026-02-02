@@ -12,7 +12,7 @@ import { stringify } from 'csv-stringify/sync';
 import type { Data } from './base.js';
 
 export class CSVFile<ENTRY = any> extends FileApi<ENTRY> {
-	static ext = '.csv';
+	static ext = 'csv';
 
 	async parse(content: string) {
 		const entries = parse(content, {
@@ -37,6 +37,6 @@ export class CSVFile<ENTRY = any> extends FileApi<ENTRY> {
 
 		const metadata = yaml.stringify(data.metadata).split("\n").map(x => '# ' + x).join("\n");
 
-		return [metadata, stringify(entries)].join("\n");
+		return [metadata, stringify(entries, { header: true })].join("\n");
 	}
 }

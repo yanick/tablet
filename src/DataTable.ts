@@ -49,7 +49,7 @@ export default class DataTable<ENTRY = Record<string, any>, META extends Metadat
 	constructor(path: string) {
 		this.path = path;
 
-		const ext = extname(path);
+		const ext = extname(path).replace(/^\./, '');
 
 		const fileApi = this.findApi(ext);
 		if (!fileApi) {

@@ -8,24 +8,24 @@ import { markdownTable } from 'markdown-table';
 import * as R from 'remeda';
 import type { Data } from './base.js';
 
-export class YamlFile<ENTRY=any> extends FileApi<ENTRY> {
-    static ext = ['.yml','.yaml'];
+export class YamlFile<ENTRY = any> extends FileApi<ENTRY> {
+	static ext = ['yml', 'yaml'];
 
-    async parse(content:string) {
-        const parsed: any = yaml.parseAllDocuments(
-            content
-        ).map(x => x.toJSON());
+	async parse(content: string) {
+		const parsed: any = yaml.parseAllDocuments(
+			content
+		).map(x => x.toJSON());
 
-        if (parsed.length < 2) parsed.unshift({});
+		if (parsed.length < 2) parsed.unshift({});
 
-        const [metadata, entries] = parsed;
+		const [metadata, entries] = parsed;
 
-        return { metadata, entries };
-    }
+		return { metadata, entries };
+	}
 
-    async serialize(data:Data<ENTRY>) {
+	async serialize(data: Data<ENTRY>) {
 
-        let entries = data.entries;
+		let entries = data.entries;
 		entries = u.map(entries, {
 			roll: r => {
 				if (!Array.isArray(r)) return r;
@@ -33,12 +33,12 @@ export class YamlFile<ENTRY=any> extends FileApi<ENTRY> {
 			}
 		});
 
-        let content = yaml.stringify(entries);
+		let content = yaml.stringify(entries);
 
-        if(data.metadata) {
-            content = `---\n${yaml.stringify(data.metadata)}\n---\n${content}\n`;
-        }
+		if (data.metadata) {
+			content = `---\n${yaml.stringify(data.metadata)}\n---\n${content}\n`;
+		}
 
-        return content;
-    }
+		return content;
+	}
 }

@@ -3,7 +3,7 @@ import type { Data } from './base.js';
 import u from '@yanick/updeep';
 
 export class JSONFile<ENTRY = any> extends FileApi<ENTRY> {
-	static ext = '.json';
+	static ext = 'json';
 
 	async parse(content: string) {
 		const parsed = JSON.parse(content);

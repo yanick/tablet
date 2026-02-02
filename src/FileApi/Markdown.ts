@@ -8,20 +8,20 @@ import { markdownTable } from 'markdown-table';
 import * as R from 'remeda';
 import type { Data } from './base.js';
 
-export class MarkdownFile<ENTRY=any> extends FileApi<ENTRY> {
-    static ext = '.md';
+export class MarkdownFile<ENTRY = any> extends FileApi<ENTRY> {
+	static ext = 'md';
 
-    async parse(content:string) {
-        const parsed = frontmatter(content);
+	async parse(content: string) {
+		const parsed = frontmatter(content);
 
-        const metadata = parsed.data;
-        const entries = [...createMarkdownObjectTableSync(parsed.content)];
+		const metadata = parsed.data;
+		const entries = [...createMarkdownObjectTableSync(parsed.content)];
 
-        return { metadata, entries } as any;
-    }
+		return { metadata, entries } as any;
+	}
 
-    async serialize(data:Data<ENTRY>) {
-		const meta = yaml.stringify(data.metadata);
+	async serialize(data: Data<ENTRY>) {
+		const meta = data.metadata ? yaml.stringify(data.metadata) : '';
 
 		const headers = Object.keys(data.entries[0]);
 		let entries = u.map(data.entries, {
@@ -36,6 +36,6 @@ export class MarkdownFile<ENTRY=any> extends FileApi<ENTRY> {
 			headers, ...entries.map(e => headers.map(h => e[h]))
 		]);
 
-		return `---\n${meta}\n---\n${table}\n`;
-    }
+		return meta ? `---\n${meta}\n---\n${table}\n` : table;
+	}
 }

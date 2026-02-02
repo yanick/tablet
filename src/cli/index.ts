@@ -12,9 +12,14 @@ const argv = yargs(hideBin(process.argv))
 		handler: async (argv) => {
 			const table = new DataTable(argv.file);
 
+			const Printer = table.findApi('md');
+			const printer = new Printer();
+
 			console.log(
-				JSON.stringify(await table.roll())
-			)
+				await printer.serialize({
+					entries: [await table.roll()]
+				})
+			);
 		}
 	})
 	.help()
