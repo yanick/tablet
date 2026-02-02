@@ -5,7 +5,7 @@ import { hideBin } from 'yargs/helpers';
 import DataTable from '../DataTable.js';
 
 const addOutput = (yargs) => {
-	yargs.alias('output', 'o')
+	return yargs.alias('output', 'o')
 		.describe('output', 'output format of the table')
 		.choices('output', ['md', 'yaml', 'yml', 'json', 'csv'])
 };
@@ -15,9 +15,7 @@ const argv = yargs(hideBin(process.argv))
 	.command({
 		command: 'roll <file>',
 		describe: 'roll to select an entry of the table',
-		builder: (yargs) => {
-			addOutput(yargs);
-		},
+		builder: (yargs) => addOutput(yargs),
 		handler: async (argv) => {
 			const table = new DataTable(argv.file);
 
@@ -34,9 +32,7 @@ const argv = yargs(hideBin(process.argv))
 	.command({
 		command: 'print <file>',
 		describe: 'print the table to stdout',
-		builder: (yargs) => {
-			addOutput(yargs);
-		},
+		builder: (yargs) => addOutput(yargs),
 		handler: async (argv) => {
 			const table = new DataTable(argv.file);
 

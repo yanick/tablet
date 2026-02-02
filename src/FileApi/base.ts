@@ -7,7 +7,7 @@ export class FileApi<ENTRY=any> {
     static ext : string | string[] = [];
 
 
-    constructor(public path:string) {
+    constructor(public path?:string) {
     }
 
     async readFile() {

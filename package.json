@@ -1,6 +1,6 @@
 {
   "name": "@yanick/tablet",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Utilities to interact with roleplaying games' data tables",
   "keywords": [
     "rpg"

@@ -23,7 +23,7 @@ export class CSVFile<ENTRY = any> extends FileApi<ENTRY> {
 
 		const metadata = yaml.parse(content.split("\n").filter(x => x.startsWith('#')).map(x => x.replace(/^#\s*/, '')).join("\n"));
 
-		return { metadata, entries };
+		return { metadata, entries } as Data<ENTRY>;
 	}
 
 	async serialize(data: Data<ENTRY>) {
